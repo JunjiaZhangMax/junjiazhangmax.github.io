@@ -250,7 +250,7 @@
   <p>with reference temperature $\tau$ set to the median train nearest-neighbor gap. The <strong>realized memorizing entropy</strong> $\overline{M}^\theta\in[0,\log N]$ is a <strong>direct, field-level generalization score</strong>: $\overline{M}^\theta\approx0$ signals memorization; $\overline{M}^\theta\approx\log N$ signals generalization.</p>
 
   <figure>
-    <img src="figures/entropy_curves_side_by_side.png" alt="Trained-MLP entropy collapse curves across dimension d and across data size N">
+    <img src="figures/entropy_curves_side_by_side.png" alt="Trained-MLP entropy collapse curves across dimension d and across data size N" width="2414" height="750" loading="lazy" decoding="async">
     <figcaption>Figure 2.1 — The realized memorizing entropy $M^\theta(t,\cdot)$ along sampling trajectories. <strong>Left</strong> (varying dimension $d$, fixed $N{=}500$): collapse sharpens and starts earlier as $d$ grows. <strong>Right</strong> (varying data size $N$, fixed $d{=}32$): collapse softens and is delayed as $N$ grows — more data buys generalization directly.</figcaption>
   </figure>
 
@@ -271,7 +271,7 @@
   <p>The memorizing field can be thought of as an <strong>energy landscape whose basins are the training points</strong>. Memorization = landing at a basin bottom; generalization = settling <em>between</em> basins. $\gamma$ reshapes the landscape (flattens basins); $\varepsilon$ supplies stochastic kinetic energy at sampling time.</p>
 
   <figure>
-    <img src="figures/manifold_quad.png" alt="Four manifold schematics: clean collapse, ε basin-hop, γ-flattened basins, between-basin noisy sample">
+    <img src="figures/manifold_quad.png" alt="Four manifold schematics: clean collapse, ε basin-hop, γ-flattened basins, between-basin noisy sample" width="1468" height="1352" loading="lazy" decoding="async">
     <figcaption>Figure 2.2 — The research journey on one manifold (curved grid = 2D stand-in for the high-dimensional image manifold; black dots = training points / basin bottoms). <strong>(a)</strong> Clean collapse onto a single training point — memorization. <strong>(b)</strong> Adding $\varepsilon$ kicks the trajectory into a <em>neighbouring</em> basin bottom — still memorization. <strong>(c)</strong> Training-time $\gamma$ <strong>flattens</strong> the basins (orange arrows), preventing collapse. <strong>(d)</strong> Sampling on the flattened landscape settles <em>between</em> basins — genuinely novel but noisy.</figcaption>
   </figure>
 
@@ -300,7 +300,7 @@
   <p>The posterior entropy $H(w)$ collapses to 0 by $t=1$; the collapse <strong>sharpens with dimension</strong> (collapse time $t^{*}$ falls from $\sim0.70$ at $d=16$ to $\sim0.33$ at $d=256$) and <strong>delays with data size $N$</strong>. The trained network lags the optimal field, with the lag saturating at $\Delta t^{*}\!\approx\!0.16$.</p>
 
   <figure>
-    <img src="figures/entropy_sweep_tstar.png" alt="Path-collapse time vs dimension: optimal field, trained MLP, and their lag">
+    <img src="figures/entropy_sweep_tstar.png" alt="Path-collapse time vs dimension: optimal field, trained MLP, and their lag" width="1200" height="750" loading="lazy" decoding="async">
     <figcaption>Figure F2 — Collapse time $t^{*}$ falls with dimension for both the optimal field and the trained MLP; the network's lag behind the optimal field saturates at $\Delta t^{*}\!\approx\!0.16$.</figcaption>
   </figure>
 
@@ -310,14 +310,14 @@
   <p>On FashionMNIST, small-$N$ models reproduce training images near-verbatim; top-$k$ nearest-neighbour analysis shows a generated image matches exactly one training image at tiny distance (NN2/NN1 distance ratio $\approx 7$) — instance-level memorization, not class-level resemblance.</p>
 
   <figure>
-    <img src="figures/fmnist_sscd_topk.png" alt="Generated images next to their 5 nearest training images by SSCD distance" class="half">
+    <img src="figures/fmnist_sscd_topk.png" alt="Generated images next to their 5 nearest training images by SSCD distance" class="half" width="1057" height="1391" loading="lazy" decoding="async">
     <figcaption>Figure F3a — Instance-level memorization ($N=100$). For each generated image, NN1 is a near-exact copy (tiny SSCD distance, red) while NN2–NN5 are clearly different — a single sharp match, not class-level resemblance.</figcaption>
   </figure>
 
   <p>Sweeping per-class $N$ (single-class Ankle boot, fixed compute) gives a clean <strong>memorization → generalization phase transition</strong>: SSCD $\rho$ rises monotonically $0.15\,(N{=}10)\to0.60\,(N{=}100)\to1.05\,(N{=}300)\to1.12\,(N{=}1000)$, crossing the "novel" line near $N\approx300$.</p>
 
   <figure>
-    <img src="figures/fmnist_singleclass_ratio.png" alt="Single-class memorization ratio vs per-class training size N">
+    <img src="figures/fmnist_singleclass_ratio.png" alt="Single-class memorization ratio vs per-class training size N" width="1050" height="675" loading="lazy" decoding="async">
     <figcaption>Figure F3b — Memorization → generalization phase transition (single-class Ankle boot). The SSCD ratio $\rho$ crosses the "as novel as a real image" line ($\rho=1$) near $N\approx300$.</figcaption>
   </figure>
 
@@ -325,12 +325,12 @@
   <p>A naive SDE appeared to escape ($\rho_{\text{SSCD}}$ crossing 1 near $\varepsilon\approx0.35$). <strong>This was an artifact</strong>: the injected noise leaves a high-frequency grain that inflates $d_{\text{gen}}$ regardless of content. With a <strong>clean-tail (churn) sampler</strong> (noise only for $t&lt;0.7$, then deterministic re-cohering), the apparent escape largely disappears: $\rho_{\text{SSCD}}$ stays $0.5\!-\!0.7$ up to $\varepsilon=0.7$, and only "escapes" at $\varepsilon=1.0$ by destroying the image. <strong>$\varepsilon$ is a manifold-projection / realism force, not an escape lever.</strong></p>
 
   <figure>
-    <img src="figures/fmnist_sde_churn_ratio.png" alt="Memorization ratio vs sampling noise eps with a clean-tail sampler">
+    <img src="figures/fmnist_sde_churn_ratio.png" alt="Memorization ratio vs sampling noise eps with a clean-tail sampler" width="1050" height="675" loading="lazy" decoding="async">
     <figcaption>Figure F4 — With the noise-grain confound removed (clean-tail sampler), increasing $\varepsilon$ does not escape memorization: $\rho_{\text{SSCD}}$ stays in the memorizing range up to $\varepsilon=0.7$ and only leaves at $\varepsilon=1.0$ by destroying the image.</figcaption>
   </figure>
 
   <figure>
-    <img src="figures/fmnist_sde_eps_sc_grid.png" alt="Same seeds at increasing eps: the generated boot is visually unchanged across most of the range">
+    <img src="figures/fmnist_sde_eps_sc_grid.png" alt="Same seeds at increasing eps: the generated boot is visually unchanged across most of the range" width="1457" height="1244" loading="lazy" decoding="async">
     <figcaption>Figure F4b — Same seeds, increasing $\varepsilon$ (top row deterministic). Each column is recognizably the same boot from $\varepsilon=0$ through $\varepsilon=0.5$–$0.7$; the image only degrades into noise at $\varepsilon=1.0$. The metric crossing tracks image dissolution, not content change.</figcaption>
   </figure>
 
@@ -338,12 +338,12 @@
   <p>Training with smoothing $\gamma$ and sampling deterministically ($\varepsilon=0$), SSCD $\rho_{\text{train}}$ rises from $0.50\,(\gamma{=}0)$ past 1 already at $\gamma=0.1$ ($1.33$), confirming that <strong>flattening the basins lets deterministic trajectories settle between training points</strong>. But samples become progressively blurry as $\gamma$ grows — a quality cost.</p>
 
   <figure>
-    <img src="figures/fmnist_gamma_ratio.png" alt="Deterministic-sampling memorization ratio vs training smoothing gamma">
+    <img src="figures/fmnist_gamma_ratio.png" alt="Deterministic-sampling memorization ratio vs training smoothing gamma" width="1050" height="675" loading="lazy" decoding="async">
     <figcaption>Figure F5 — Training-time smoothing $\gamma$, sampled deterministically ($\varepsilon=0$): $\rho_{\text{train}}$ crosses 1 already at $\gamma=0.1$, i.e. flattening the basins lets deterministic trajectories settle between training points — at a rising blur cost.</figcaption>
   </figure>
 
   <figure>
-    <img src="figures/fmnist_gamma_nn.png" alt="Generated vs nearest training boot, increasing gamma">
+    <img src="figures/fmnist_gamma_nn.png" alt="Generated vs nearest training boot, increasing gamma" width="1443" height="1251" loading="lazy" decoding="async">
     <figcaption>Figure F5b — Generated samples ($\varepsilon=0$, paired rows: generated / nearest train) as $\gamma$ increases. At $\gamma=0$ the generated boot is visually identical to its nearest training neighbor; as $\gamma$ grows the rows visibly diverge while the generated row grows progressively grainier/blurrier.</figcaption>
   </figure>
 
@@ -351,7 +351,7 @@
   <p>The joint phase diagram shows two <em>opposing</em> gradients: $\gamma$ raises novelty $\rho_{\text{train}}$ (and degrades realism $\rho_{\text{test}}$); $\varepsilon$ <em>lowers</em> $\rho_{\text{train}}$ (pulls back toward memorization) while modestly improving realism. <strong>No cell achieves both $\rho_{\text{train}}\!\approx\!1$ and $\rho_{\text{test}}\!\approx\!1$.</strong></p>
 
   <figure>
-    <img src="figures/fmnist_gamma_eps_heat.png" alt="Joint gamma x eps phase diagram: two heatmaps for novelty and realism">
+    <img src="figures/fmnist_gamma_eps_heat.png" alt="Joint gamma x eps phase diagram: two heatmaps for novelty and realism" width="1777" height="709" loading="lazy" decoding="async">
     <figcaption>Figure F6 — The $\gamma\times\varepsilon$ phase diagram. Left ($\rho_{\text{train}}$, novelty): rises with $\gamma$, falls with $\varepsilon$. Right ($\rho_{\text{test}}$, realism): degrades with $\gamma$. The two knobs are opposing; the best cell is a compromise, not a point where both ratios reach 1.</figcaption>
   </figure>
 

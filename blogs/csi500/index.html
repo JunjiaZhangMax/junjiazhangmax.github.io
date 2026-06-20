@@ -296,7 +296,7 @@
   <p><code>amplitude_ma_20d</code> captures the average daily price swing range over the past 20 trading days. Unlike <code>vol_20d</code> (which measures <em>return</em> std), amplitude captures the absolute intraday price range and is particularly informative during momentum breakouts. <strong>Adding this single feature raised the April backtest Sharpe from 0.800 to 0.978 (+22%).</strong></p>
 
   <figure>
-    <img src="figures/fig1_feature_importance.png" alt="Figure 1 — Feature importance">
+    <img src="figures/fig1_feature_importance.png" alt="Figure 1 — Feature importance" width="2578" height="1139" loading="lazy" decoding="async">
     <figcaption>Figure 1. XGBoost gain-based feature importance for the w2_023 ensemble (target_3d and target_5d models averaged).</figcaption>
   </figure>
 
@@ -349,7 +349,7 @@
   <p>A sample from 3 months ago receives 50% of the most recent day's weight; data older than ~6 months retains 50% via the floor. Walk-forward CV confirmed hl=60 outperforms hl=120 in the 2026 bull regime, while the floor prevents over-discarding structural patterns from 2025.</p>
 
   <figure>
-    <img src="figures/fig2_decay_weight.png" alt="Figure 2 — Time-decay weights">
+    <img src="figures/fig2_decay_weight.png" alt="Figure 2 — Time-decay weights" width="2177" height="1059" loading="lazy" decoding="async">
     <figcaption>Figure 2. Per-day training contribution (mint bars = #stocks × W(60)) and the W(t) decay curves for hl=60 (used) and hl=120 (alternative). The red dotted line marks the floor=0.5; the cutoff is 2026-04-23.</figcaption>
   </figure>
 
@@ -434,7 +434,7 @@ while any w > 0.10:
   </div>
 
   <figure>
-    <img src="figures/fig3_cumulative_return.png" alt="Figure 3 — Cumulative return">
+    <img src="figures/fig3_cumulative_return.png" alt="Figure 3 — Cumulative return" width="2265" height="1138" loading="lazy" decoding="async">
     <figcaption>Figure 3. Cumulative return of the w2_023 portfolio vs the CSI500 benchmark over the walk-forward period (27 non-overlapping 5-day windows, Oct 2025 – May 2026). The outperformance gap widens steadily from late February onward.</figcaption>
   </figure>
 
@@ -473,7 +473,7 @@ while any w > 0.10:
   <p>Every sub-window delivered positive excess. <strong>Zero losing periods</strong> across five consecutive weeks.</p>
 
   <figure>
-    <img src="figures/fig4_ensemble_sweep.png" alt="Figure 4 — Ensemble horizon sweep">
+    <img src="figures/fig4_ensemble_sweep.png" alt="Figure 4 — Ensemble horizon sweep" width="1934" height="1286" loading="lazy" decoding="async">
     <figcaption>Figure 4. Ensemble horizon sweep (risk–return scatter, Mar–Apr 2026 walk-forward). Bubble size encodes the number of horizons used. The selected 3+5 ensemble sits on the efficient frontier with the best Sharpe.</figcaption>
   </figure>
 
