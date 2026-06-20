@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memorization in Flow Matching — Junjia Zhang</title>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 17px; }
+
+    body {
+      font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+      background: #fff;
+      color: #111;
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 60px 2rem 120px;
+    }
+
+    a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { opacity: 0.55; }
+
+    .back {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: #999;
+      text-decoration: none;
+      margin-bottom: 3rem;
+      letter-spacing: 0.01em;
+    }
+    .back:hover { color: #111; opacity: 1; }
+
+    .post-meta { font-size: 0.82rem; color: #999; font-style: italic; margin-bottom: 0.5rem; }
+
+    h1.post-title {
+      font-size: clamp(1.3rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+
+    .post-byline { font-size: 0.88rem; color: #555; margin-bottom: 2rem; }
+
+    .abstract {
+      border-left: 2px solid #ddd;
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.92rem;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    .abstract strong { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: #999; }
+
+    blockquote {
+      border-left: 2px solid #ccc;
+      padding: 0.6rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.93rem;
+      color: #444;
+      font-style: italic;
+      line-height: 1.8;
+    }
+
+    hr { border: none; border-top: 1px solid #e8e8e8; margin: 2.5rem 0; }
+
+    h2 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin: 2.75rem 0 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      font-size: 0.96rem;
+      font-weight: 700;
+      margin: 2rem 0 0.5rem;
+      color: #222;
+    }
+
+    p { margin-bottom: 1rem; font-size: 0.96rem; }
+
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; font-size: 0.96rem; }
+    li { margin-bottom: 0.35rem; }
+
+    /* Math */
+    .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; margin: 1rem 0; }
+
+    /* Boxed result */
+    .boxed {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0.75rem 1.25rem;
+      margin: 1.25rem 0;
+      background: #fafafa;
+      overflow-x: auto;
+    }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; line-height: 1.55; }
+    th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid #ccc; font-weight: 700; font-size: 0.77rem; letter-spacing: 0.04em; text-transform: uppercase; color: #555; }
+    td { padding: 0.45rem 0.75rem; border-bottom: 1px solid #efefef; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+
+    /* Code */
+    pre {
+      background: #f7f7f5;
+      border: 1px solid #e8e8e8;
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      line-height: 1.6;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    code { font-family: 'Courier New', Courier, monospace; font-size: 0.82em; background: #f3f3f1; padding: 0.1em 0.35em; border-radius: 3px; }
+    pre code { background: none; padding: 0; font-size: inherit; }
+
+    /* Figures */
+    figure { margin: 2rem 0; }
+    figure img { width: 100%; height: auto; display: block; }
+    figure img.half { width: 50%; margin: 0 auto; }
+    figcaption { font-size: 0.81rem; color: #777; margin-top: 0.6rem; font-style: italic; line-height: 1.6; }
+
+    /* Finding label */
+    .finding {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 0.25rem;
+    }
+
+    footer {
+      margin-top: 5rem;
+      font-size: 0.8rem;
+      color: #bbb;
+      border-top: 1px solid #efefef;
+      padding-top: 1.5rem;
+    }
+
+    @media (max-width: 500px) {
+      html { font-size: 16px; }
+      body { padding: 40px 1.25rem 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../../index.html" class="back">← Junjia Zhang</a>
+
+  <p class="post-meta">Stage Research Report &middot; June 15, 2026</p>
+  <h1 class="post-title">Memorization, Generalization, and the Two Noise Sources of Stochastic Interpolants in Low-Data Flow Matching</h1>
+  <p class="post-byline">Junjia Zhang &mdash; New York University Shanghai &nbsp;·&nbsp; <a href="mailto:jz7842@nyu.edu">jz7842@nyu.edu</a></p>
+
+  <div class="abstract">
+    <strong>Abstract</strong><br>
+    This report documents a self-contained research phase on <strong>memorization in low-data generative modeling</strong> with flow matching / stochastic interpolants. The guiding question was whether the two noise sources — the <strong>interpolation noise $\gamma$</strong> (training time) and the <strong>sampling noise $\varepsilon$</strong> (inference time) — are <em>interchangeable</em> or <em>complementary</em> for suppressing memorization and improving generalization.
+  </div>
+
+  <blockquote>
+    In small-data, train-from-scratch flow matching, $\gamma$ and $\varepsilon$ can only move a model <em>along</em> a fixed memorization $\leftrightarrow$ generalization $\leftrightarrow$ quality frontier; they cannot take it <em>off</em> that frontier. One cannot simultaneously achieve "does not memorize" and "high sample quality" from $N\!\approx\!10^2$ images alone, because the missing information is not in the data. Escaping the frontier requires a <em>pretrained prior</em>. The distinctive value of $\varepsilon$ is precisely that, as an inference-time knob, it can be applied to such a pretrained model at zero additional training cost.
+  </blockquote>
+
+  <p>Along the way the project also produced two reusable methodological contributions: (i) a demonstration that naive stochastic sampling <strong>over-reports "escape" from memorization</strong> because injected noise grain inflates distance metrics — controllable with a clean-tail (churn) sampler; and (ii) a coverage-controlled, copy-detection (SSCD) based memorization metric that cleanly separates <em>novelty</em> from <em>realism</em>.</p>
+
+  <hr>
+
+  <h2>1. Background and Positioning</h2>
+
+  <p>Low-data generative modeling is increasingly important in privacy-sensitive, specialist domains (medical imaging, industrial defect detection, rare-species data) where <strong>memorization is a direct privacy leak</strong>: the generator reproduces training examples verbatim. Diffusion and flow-matching models are known to memorize when data is scarce (Carlini et al. 2023; Somepalli et al. 2023; Gu et al. 2023), and to generalize when data is abundant or the architecture is suitably constrained (Kadkhodaie et al. 2024; Kamb &amp; Ganguli 2024).</p>
+
+  <p>The project began as a study of interpolation-schedule design $(\alpha_t,\beta_t,\gamma_t)$, but two concurrent works (arXiv:2509.01629, arXiv:2510.06634) covered most of that ground in the large-data regime. I therefore re-scoped to the narrower, less-explored question above: the <strong>division of labour between training-time noise $\gamma$ and inference-time noise $\varepsilon$</strong> specifically in the <em>low-data memorization</em> regime.</p>
+
+  <hr>
+
+  <h2>2. Theoretical Framework</h2>
+
+  <h3>2.1 Stochastic Interpolants</h3>
+
+  <p>With source $x_0\sim\mathcal{N}(0,I)$ and target $x_1\sim p_{\text{data}}$, the <strong>stochastic interpolant</strong> (Albergo &amp; Vanden-Eijnden, 2023; Lipman et al., 2023)</p>
+
+  $$x_t=\alpha(t)\,x_0+\beta(t)\,x_1,\qquad \alpha(0)=\beta(1)=1,\quad\alpha(1)=\beta(0)=0,$$
+
+  <p>has conditional drift $\dot{x}_t=\dot{\alpha}\,x_0+\dot{\beta}\,x_1$. Flow matching fits $v_\theta$ to the <strong>marginal</strong> velocity $v(x,t)=\mathbb{E}[\dot{\alpha}\,x_0+\dot{\beta}\,x_1\mid x_t=x]$.</p>
+
+  <p>All experiments use the <strong>conditional-OT (linear) path</strong> $\alpha=1-t,\;\beta=t$ (drift $x_1-x_0$). We keep $\alpha,\beta$ general through §2.3 to show memorization is a property of the empirical target, not the linear schedule, then specialize back from §2.4 on.</p>
+
+  <h3>2.2 The Velocity → Posterior-Mean Identity</h3>
+
+  <p>Eliminating $x_0=(x_t-\beta x_1)/\alpha$ from the drift and taking $\mathbb{E}[\cdot\mid x_t=x]$ gives, with the schedule Wronskian $W(t):=\alpha\dot{\beta}-\dot{\alpha}\beta$:</p>
+
+  <div class="boxed">
+    $$\hat{x}_1(x,t):=\mathbb{E}[x_1\mid x_t=x]=\frac{\alpha(t)\,v(x,t)-\dot{\alpha}(t)\,x}{W(t)}$$
+  </div>
+
+  <p>For conditional-OT $W\equiv1$, so $\hat{x}_1=x+(1-t)v$. The velocity thus encodes the <strong>posterior mean of the endpoint</strong>, letting us read off where any trajectory is heading from <em>any</em> trained network — essential for diagnosing memorization when the model only outputs a velocity.</p>
+
+  <h3>2.3 Memorization as the Empirical-Optimal Field; Path Collapse</h3>
+
+  <p>Take the target to be the <strong>empirical</strong> data distribution $p_{\text{data}}=\frac{1}{N}\sum_{n=1}^N\delta_{x^{(n)}}$, and derive $\hat{x}_1(x,t)$ from first principles.</p>
+
+  <p><strong>Step 1.</strong> Conditioned on $x_1=x^{(n)}$, we have $x_t\mid x_1=x^{(n)}\sim\mathcal{N}\!\big(\beta(t)\,x^{(n)},\,\alpha(t)^2 I\big)$.</p>
+
+  <p><strong>Step 2 — Bayes' rule.</strong> With uniform prior $P(x_1=x^{(n)})=1/N$,</p>
+
+  $$P(x_1=x^{(n)}\mid x_t=x)\;\propto\;\exp\!\Big(-\frac{\lVert x-\beta(t)x^{(n)}\rVert^2}{2\,\alpha(t)^2}\Big),$$
+
+  <p>so the normalized posterior is a softmax over the $N$ training points with <strong>inverse temperature $1/\alpha(t)^2$</strong>:</p>
+
+  $$w_n(x,t)=\operatorname{softmax}_n\!\Big(-\frac{\lVert x-\beta(t)\,x^{(n)}\rVert^2}{2\,\alpha(t)^2}\Big).$$
+
+  <p><strong>Step 3 — Posterior mean.</strong> Hence $\hat{x}_1(x,t)=\sum_n w_n(x,t)\,x^{(n)}$ is a <strong>weighted average of training points</strong> (attention with query $x$, keys $\beta(t)x^{(n)}$, temperature $\alpha(t)^2$). The optimal velocity field is</p>
+
+  $$v^\star(x,t)=\frac{\dot{\alpha}(t)\,x+W(t)\sum_n w_n(x,t)x^{(n)}}{\alpha(t)},$$
+
+  <p>computable in closed form from $\{x^{(n)}\}$, no learning required.</p>
+
+  <p><strong>Step 4 — Path collapse as $\alpha(t)\to0$.</strong> Define the <strong>Memorizing Entropy (ME)</strong></p>
+
+  $$M^\star(t,x)=-\sum_n w_n(x,t)\log w_n(x,t)\;\in[0,\log N].$$
+
+  <p>Since $\alpha(1)=0$, the softmax temperature $\alpha(t)^2\to0$ as $t\to1$, and for any $x$ with a unique nearest training point $n^\star$:</p>
+
+  $$w_n(x,t)\;\xrightarrow[t\to1]{}\;\mathbb{1}[n=n^\star(x)],\qquad M^\star(t,x)\;\xrightarrow[t\to1]{}\;0.$$
+
+  <p><strong>Conclusion.</strong> The probability-flow ODE driven by $v^\star$ transports <em>every</em> initial $x_0$ exactly onto one of the $N$ training points, for <em>any</em> admissible schedule — not a special property of the linear path. <strong>Memorization is forced purely by $\alpha(t)\to0$.</strong></p>
+
+  <p><strong>Memorizing Entropy under finite capacity.</strong> For a real trained model $v_\theta=v^\star+\delta_\theta$, the capacity/optimization error $\delta_\theta$ shifts the implied endpoint. Reading the assignment weights off the network's own endpoint estimate:</p>
+
+  $$\hat{x}_1^\theta(x,t)=\frac{\alpha\,v_\theta-\dot{\alpha}\,x}{W},\qquad w_n^\theta(x,t)=\operatorname{softmax}_n\!\Big(-\frac{\lVert \hat{x}_1^\theta(x,t)-x^{(n)}\rVert^2}{2\tau^2}\Big)$$
+
+  <p>with reference temperature $\tau$ set to the median train nearest-neighbor gap. The <strong>realized memorizing entropy</strong> $\overline{M}^\theta\in[0,\log N]$ is a <strong>direct, field-level generalization score</strong>: $\overline{M}^\theta\approx0$ signals memorization; $\overline{M}^\theta\approx\log N$ signals generalization.</p>
+
+  <figure>
+    <img src="figures/entropy_curves_side_by_side.png" alt="Trained-MLP entropy collapse curves across dimension d and across data size N">
+    <figcaption>Figure 2.1 — The realized memorizing entropy $M^\theta(t,\cdot)$ along sampling trajectories. <strong>Left</strong> (varying dimension $d$, fixed $N{=}500$): collapse sharpens and starts earlier as $d$ grows. <strong>Right</strong> (varying data size $N$, fixed $d{=}32$): collapse softens and is delayed as $N$ grows — more data buys generalization directly.</figcaption>
+  </figure>
+
+  <h3>2.4 The Two Noise Sources, and the Score from the Velocity</h3>
+
+  <p><strong>$\varepsilon$ (sampling noise).</strong> The probability-flow ODE and a one-parameter family of SDEs share all marginals. The marginal score is derived from the velocity:</p>
+
+  $$s(x,t)=\nabla\log p_t(x)=\frac{\beta(t)\,v(x,t)-\dot{\beta}(t)\,x}{\alpha(t)\,W(t)},$$
+
+  $$dx=\Big[v+\tfrac{\varepsilon^2}{2}s\Big]dt+\varepsilon\,dW.$$
+
+  <p>Thus <strong>$\varepsilon$ can be added at sampling time to a model trained without any noise</strong>, at zero training cost.</p>
+
+  <p><strong>$\gamma$ (interpolation / training noise).</strong> Two variants were studied: a <em>crude</em> version that smooths the target ($x_1\to x_1+\gamma\eta$, turning the empirical measure into a KDE of bandwidth $\gamma$), and an <em>endpoint-preserving</em> version $x_t=\alpha(t)x_0+\beta(t)x_1+\gamma_t z$ with $\gamma_t=4\gamma\,\alpha(t)\beta(t)$ (vanishing at both ends, smoothing only the <em>learned field</em>).</p>
+
+  <h3>2.5 Working Picture: an Energy Landscape</h3>
+
+  <p>The memorizing field can be thought of as an <strong>energy landscape whose basins are the training points</strong>. Memorization = landing at a basin bottom; generalization = settling <em>between</em> basins. $\gamma$ reshapes the landscape (flattens basins); $\varepsilon$ supplies stochastic kinetic energy at sampling time.</p>
+
+  <figure>
+    <img src="figures/manifold_quad.png" alt="Four manifold schematics: clean collapse, ε basin-hop, γ-flattened basins, between-basin noisy sample">
+    <figcaption>Figure 2.2 — The research journey on one manifold (curved grid = 2D stand-in for the high-dimensional image manifold; black dots = training points / basin bottoms). <strong>(a)</strong> Clean collapse onto a single training point — memorization. <strong>(b)</strong> Adding $\varepsilon$ kicks the trajectory into a <em>neighbouring</em> basin bottom — still memorization. <strong>(c)</strong> Training-time $\gamma$ <strong>flattens</strong> the basins (orange arrows), preventing collapse. <strong>(d)</strong> Sampling on the flattened landscape settles <em>between</em> basins — genuinely novel but noisy.</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>3. Methodology and Metrics</h2>
+
+  <ul>
+    <li><strong>Toy stage:</strong> High-dimensional GMM with a hand-coded optimal field (<code>src/optimal_model.py</code>) as an exact reference.</li>
+    <li><strong>Image stage:</strong> Single-class FashionMNIST subsets (Ankle boot), small U-Net (<code>src/unet.py</code>, ~3.7M params), conditional-OT flow matching, trained from scratch with fixed compute. Single-class was adopted to remove class-imbalance and cross-class "hopping" confounds.</li>
+    <li><strong>Memorization metric:</strong> Coverage-controlled ratio</li>
+  </ul>
+
+  $$\rho=\frac{\operatorname{median}\,d(\text{generated}\to\text{train})}{\operatorname{median}\,d(\text{held-out real}\to\text{train})}$$
+
+  <p>with $\rho\ll1$ = memorize, $\rho\approx1$ = as novel as a real held-out image. Pixel-$L_2$ was upgraded to <strong>SSCD</strong> (self-supervised copy-detection descriptor). Two ratios are used: $\rho_{\text{train}}$ (novelty, vs the training set) and $\rho_{\text{test}}$ (realism, distance to the real-boot manifold).</p>
+
+  <hr>
+
+  <h2>4. Experimental Findings</h2>
+
+  <h3>F1 — Trained Networks Closely Match the Optimal Field (GMM)</h3>
+  <p>Across dimensions $d=2\dots102$, the trained MLP reproduced the analytic optimal field to within MMD $\sim10^{-3}$, validating the implementation and the optimal-field reference.</p>
+
+  <h3>F2 — Path Collapse and a Metric Pitfall</h3>
+  <p>The posterior entropy $H(w)$ collapses to 0 by $t=1$; the collapse <strong>sharpens with dimension</strong> (collapse time $t^{*}$ falls from $\sim0.70$ at $d=16$ to $\sim0.33$ at $d=256$) and <strong>delays with data size $N$</strong>. The trained network lags the optimal field, with the lag saturating at $\Delta t^{*}\!\approx\!0.16$.</p>
+
+  <figure>
+    <img src="figures/entropy_sweep_tstar.png" alt="Path-collapse time vs dimension: optimal field, trained MLP, and their lag">
+    <figcaption>Figure F2 — Collapse time $t^{*}$ falls with dimension for both the optimal field and the trained MLP; the network's lag behind the optimal field saturates at $\Delta t^{*}\!\approx\!0.16$.</figcaption>
+  </figure>
+
+  <p><strong>Crucial correction.</strong> $H(w)\to0$ is partly a <em>readout artifact</em>: over a finite reference set, the softmax is forced to one-hot as $(1-t)\to0$ regardless of where the sample lands. $H(w)$ therefore cannot distinguish "landed on a training point" from "landed on a novel point." This motivated abandoning entropy in favour of the <strong>distance-based memorization ratio $\rho$</strong> — an important lesson in choosing a metric that measures the phenomenon and not an artifact of the parameterization.</p>
+
+  <h3>F3 — Memorization is Real, Severe, and Fades with $N$</h3>
+  <p>On FashionMNIST, small-$N$ models reproduce training images near-verbatim; top-$k$ nearest-neighbour analysis shows a generated image matches exactly one training image at tiny distance (NN2/NN1 distance ratio $\approx 7$) — instance-level memorization, not class-level resemblance.</p>
+
+  <figure>
+    <img src="figures/fmnist_sscd_topk.png" alt="Generated images next to their 5 nearest training images by SSCD distance" class="half">
+    <figcaption>Figure F3a — Instance-level memorization ($N=100$). For each generated image, NN1 is a near-exact copy (tiny SSCD distance, red) while NN2–NN5 are clearly different — a single sharp match, not class-level resemblance.</figcaption>
+  </figure>
+
+  <p>Sweeping per-class $N$ (single-class Ankle boot, fixed compute) gives a clean <strong>memorization → generalization phase transition</strong>: SSCD $\rho$ rises monotonically $0.15\,(N{=}10)\to0.60\,(N{=}100)\to1.05\,(N{=}300)\to1.12\,(N{=}1000)$, crossing the "novel" line near $N\approx300$.</p>
+
+  <figure>
+    <img src="figures/fmnist_singleclass_ratio.png" alt="Single-class memorization ratio vs per-class training size N">
+    <figcaption>Figure F3b — Memorization → generalization phase transition (single-class Ankle boot). The SSCD ratio $\rho$ crosses the "as novel as a real image" line ($\rho=1$) near $N\approx300$.</figcaption>
+  </figure>
+
+  <h3>F4 — $\varepsilon$ Alone Does <em>Not</em> Escape Memorization</h3>
+  <p>A naive SDE appeared to escape ($\rho_{\text{SSCD}}$ crossing 1 near $\varepsilon\approx0.35$). <strong>This was an artifact</strong>: the injected noise leaves a high-frequency grain that inflates $d_{\text{gen}}$ regardless of content. With a <strong>clean-tail (churn) sampler</strong> (noise only for $t&lt;0.7$, then deterministic re-cohering), the apparent escape largely disappears: $\rho_{\text{SSCD}}$ stays $0.5\!-\!0.7$ up to $\varepsilon=0.7$, and only "escapes" at $\varepsilon=1.0$ by destroying the image. <strong>$\varepsilon$ is a manifold-projection / realism force, not an escape lever.</strong></p>
+
+  <figure>
+    <img src="figures/fmnist_sde_churn_ratio.png" alt="Memorization ratio vs sampling noise eps with a clean-tail sampler">
+    <figcaption>Figure F4 — With the noise-grain confound removed (clean-tail sampler), increasing $\varepsilon$ does not escape memorization: $\rho_{\text{SSCD}}$ stays in the memorizing range up to $\varepsilon=0.7$ and only leaves at $\varepsilon=1.0$ by destroying the image.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="figures/fmnist_sde_eps_sc_grid.png" alt="Same seeds at increasing eps: the generated boot is visually unchanged across most of the range">
+    <figcaption>Figure F4b — Same seeds, increasing $\varepsilon$ (top row deterministic). Each column is recognizably the same boot from $\varepsilon=0$ through $\varepsilon=0.5$–$0.7$; the image only degrades into noise at $\varepsilon=1.0$. The metric crossing tracks image dissolution, not content change.</figcaption>
+  </figure>
+
+  <h3>F5 — $\gamma$ Does Move Samples off the Training Points</h3>
+  <p>Training with smoothing $\gamma$ and sampling deterministically ($\varepsilon=0$), SSCD $\rho_{\text{train}}$ rises from $0.50\,(\gamma{=}0)$ past 1 already at $\gamma=0.1$ ($1.33$), confirming that <strong>flattening the basins lets deterministic trajectories settle between training points</strong>. But samples become progressively blurry as $\gamma$ grows — a quality cost.</p>
+
+  <figure>
+    <img src="figures/fmnist_gamma_ratio.png" alt="Deterministic-sampling memorization ratio vs training smoothing gamma">
+    <figcaption>Figure F5 — Training-time smoothing $\gamma$, sampled deterministically ($\varepsilon=0$): $\rho_{\text{train}}$ crosses 1 already at $\gamma=0.1$, i.e. flattening the basins lets deterministic trajectories settle between training points — at a rising blur cost.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="figures/fmnist_gamma_nn.png" alt="Generated vs nearest training boot, increasing gamma">
+    <figcaption>Figure F5b — Generated samples ($\varepsilon=0$, paired rows: generated / nearest train) as $\gamma$ increases. At $\gamma=0$ the generated boot is visually identical to its nearest training neighbor; as $\gamma$ grows the rows visibly diverge while the generated row grows progressively grainier/blurrier.</figcaption>
+  </figure>
+
+  <h3>F6 — Joint $\gamma\times\varepsilon$: Opposing Knobs on One Frontier</h3>
+  <p>The joint phase diagram shows two <em>opposing</em> gradients: $\gamma$ raises novelty $\rho_{\text{train}}$ (and degrades realism $\rho_{\text{test}}$); $\varepsilon$ <em>lowers</em> $\rho_{\text{train}}$ (pulls back toward memorization) while modestly improving realism. <strong>No cell achieves both $\rho_{\text{train}}\!\approx\!1$ and $\rho_{\text{test}}\!\approx\!1$.</strong></p>
+
+  <figure>
+    <img src="figures/fmnist_gamma_eps_heat.png" alt="Joint gamma x eps phase diagram: two heatmaps for novelty and realism">
+    <figcaption>Figure F6 — The $\gamma\times\varepsilon$ phase diagram. Left ($\rho_{\text{train}}$, novelty): rises with $\gamma$, falls with $\varepsilon$. Right ($\rho_{\text{test}}$, realism): degrades with $\gamma$. The two knobs are opposing; the best cell is a compromise, not a point where both ratios reach 1.</figcaption>
+  </figure>
+
+  <hr>
+
+  <h2>5. Synthesis: a Fixed Frontier</h2>
+
+  <p>The findings assemble into one coherent statement. In small-data, train-from-scratch flow matching there is an <strong>intrinsic frontier</strong> relating memorization, generalization (novelty), and sample quality (realism):</p>
+
+  <ul>
+    <li>The memorizing field has <strong>deep, narrow basins</strong> at the few training points.</li>
+    <li>$\gamma$ (training-time) <strong>reshapes the landscape</strong>: it flattens basins so deterministic sampling lands between points (novelty), but a flatter landscape also pushes mass off the real-data manifold (blur).</li>
+    <li>$\varepsilon$ (inference-time) <strong>does not cross basins</strong> once the noise-grain confound is removed; it performs a stochastic projection back toward the manifold (realism), at the cost of re-approaching the training points.</li>
+  </ul>
+
+  <p>Crucially, <strong>neither knob injects the information that 100 images do not contain.</strong> Moving along the frontier is all they can do; they cannot leave it. Genuinely attaining <em>both</em> "does not memorize" <em>and</em> "high quality" requires an <strong>external prior</strong> — i.e., a <strong>pretrained model</strong> carrying knowledge of the broader data manifold. This also matches deployment reality, where few-shot generation is overwhelmingly done by adapting large pretrained models (LoRA / DreamBooth), not training from scratch.</p>
+
+  <p>Within that reframing, <strong>$\varepsilon$ acquires its real value</strong>: being a pure inference-time operation derived algebraically from the velocity (§2.4), it can be applied to <em>any</em> pretrained generator <strong>at zero training cost</strong> — a model-agnostic realism/diversity knob — whereas $\gamma$ requires (re)training.</p>
+
+  <hr>
+
+  <h2>6. Methodological Contributions</h2>
+
+  <ol>
+    <li><strong>The noise-grain confound and the clean-tail test (F4).</strong> Reporting "escape from memorization" from a stochastic sampler without controlling for injected high-frequency grain over-states the effect; a clean-tail/churn schedule plus a copy-detection metric is needed to separate genuine content change from texture. This is a transferable caution for the diffusion-memorization literature.</li>
+    <li><strong>A novelty/realism-separated memorization metric.</strong> The pair $(\rho_{\text{train}},\rho_{\text{test}})$ in SSCD space distinguishes the three failure modes (memorize / novel-but-blurry / off-manifold garbage) that a single distance ratio conflates.</li>
+    <li><strong>Controlled single-class design.</strong> Replacing random multi-class subsets with single-class, per-class-$N$ sweeps removed class-imbalance and cross-class hopping confounds and produced clean phase-transition curves.</li>
+    <li><strong>The velocity → posterior-mean identity as a diagnostic</strong> ($\hat{x}_1$) for models that expose only a velocity.</li>
+  </ol>
+
+  <hr>
+
+  <h2>7. Reflection on the Research Process</h2>
+
+  <p>This phase was, in hindsight, a sequence of <strong>hypotheses sharpened by their own falsification</strong>:</p>
+
+  <p>It began with the intuitive thesis "two noise sources, both should help against memorization." The toy models forced a first correction — the entropy collapse metric I had built was measuring a parameterization artifact, not memorization.</p>
+
+  <p>On real images, the appealing result "$\varepsilon$ escapes memorization" turned out, on closer scrutiny, to be <strong>noise grain fooling the metric</strong>. Designing the clean-tail control and watching the escape evaporate was the turning point of the project: it replaced an attractive but wrong claim with a defensible negative one.</p>
+
+  <p>$\gamma$ then <em>did</em> work — but introduced a quality cost — and the "smarter" $\gamma_t$ I expected to break the trade-off simply traced the same frontier.</p>
+
+  <p>The cumulative lesson is conceptual: <strong>the limiting factor in low-data generative modeling is information, not the choice of where to inject noise.</strong></p>
+
+  <hr>
+
+  <h2>8. Limitations</h2>
+
+  <ul>
+    <li>Single dataset/modality (FashionMNIST, $28\times28$ grayscale) and one architecture/compute budget; absolute numbers are regime-specific.</li>
+    <li>SSCD is pretrained on natural RGB images; on small grayscale fashion images it is reliable for <em>relative</em> trends and copy detection but its absolute scale carries a domain gap.</li>
+    <li>$\rho_{\text{test}}>1$ at large $\gamma/\varepsilon$ mixes genuine novelty with quality degradation; visual panels were used as the arbiter.</li>
+    <li>Single random seed per configuration; multi-seed error bars are not yet attached to the phase diagrams.</li>
+  </ul>
+
+  <hr>
+
+  <h2>References</h2>
+
+  <p style="font-size:0.85rem; color:#555; line-height:1.9;">
+    Albergo, Boffi &amp; Vanden-Eijnden, <em>Stochastic Interpolants</em> (2023) ·
+    Song et al., <em>Score-Based Generative Modeling through SDEs</em> (ICLR 2021) ·
+    Karras et al., <em>Elucidating the Design Space of Diffusion Models</em> (NeurIPS 2022) ·
+    Lipman et al., <em>Flow Matching for Generative Modeling</em> (ICLR 2023) ·
+    Carlini et al., <em>Extracting Training Data from Diffusion Models</em> (2023) ·
+    Somepalli et al., <em>Understanding and Mitigating Copying in Diffusion Models</em> (2023) ·
+    Kadkhodaie et al., <em>Generalization in diffusion models</em> (ICLR 2024) ·
+    Kamb &amp; Ganguli, <em>An analytic theory of creativity in convolutional diffusion</em> (2024)
+  </p>
+
+  <footer>
+    &copy; 2026 Junjia Zhang &nbsp;&middot;&nbsp; <a href="../../index.html">← Back to home</a>
+  </footer>
+
+</body>
+</html>
