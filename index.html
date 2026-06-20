@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Junjia Zhang — Researcher and AI enthusiast.">
+  <title>Junjia Zhang</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 17px;
+    }
+
+    body {
+      font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+      background: #fff;
+      color: #111;
+      line-height: 1.75;
+      max-width: 630px;
+      margin: 0 auto;
+      padding: 80px 2rem 120px;
+    }
+
+    /* ── Links ── */
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      opacity: 0.55;
+    }
+
+    /* ── Header ── */
+    header {
+      margin-bottom: 3.5rem;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.25rem;
+    }
+
+    header .subtitle {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 1.25rem;
+      font-style: italic;
+    }
+
+    header p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+
+    .social-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.5rem;
+      font-size: 0.9rem;
+      color: #444;
+      list-style: none;
+    }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 3.5rem;
+    }
+
+    section h2 {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    /* ── Research entries ── */
+    .entry {
+      margin-bottom: 2rem;
+    }
+
+    .entry-meta {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 0.2rem;
+      font-style: italic;
+    }
+
+    .entry-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 0.25rem;
+    }
+
+    .entry-authors {
+      font-size: 0.88rem;
+      color: #555;
+      margin-bottom: 0.4rem;
+    }
+
+    .entry-abstract {
+      font-size: 0.9rem;
+      color: #444;
+      line-height: 1.75;
+      margin-bottom: 0.6rem;
+    }
+
+    .entry-links {
+      font-size: 0.85rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* ── Courses ── */
+    .course-list {
+      list-style: none;
+    }
+
+    .course-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #efefef;
+      font-size: 0.95rem;
+    }
+
+    .course-list li:first-child {
+      border-top: 1px solid #efefef;
+    }
+
+    .course-name {
+      flex: 1;
+    }
+
+    .course-code {
+      font-size: 0.78rem;
+      color: #999;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: nowrap;
+    }
+
+    /* ── Blog ── */
+    .blog-list {
+      list-style: none;
+    }
+
+    .blog-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #efefef;
+    }
+
+    .blog-list li:first-child {
+      border-top: 1px solid #efefef;
+    }
+
+    .blog-list a {
+      font-size: 0.95rem;
+      text-decoration: none;
+      flex: 1;
+    }
+
+    .blog-list a:hover {
+      text-decoration: underline;
+      opacity: 1;
+    }
+
+    .blog-date {
+      font-size: 0.8rem;
+      color: #999;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 5rem;
+      font-size: 0.8rem;
+      color: #bbb;
+    }
+
+    @media (max-width: 500px) {
+      html {
+        font-size: 16px;
+      }
+
+      body {
+        padding: 60px 1.25rem 80px;
+      }
+
+      .course-list li,
+      .blog-list li {
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Junjia Zhang</h1>
+    <p class="subtitle">Learning &middot; Vision &middot; New York University Shanghai</p>
+    <p>
+      I am a student [class of 2029] at NYU Shanghai. My work focuses on
+      building more efficient ways in visual information compression and representation;
+      unifying generative model frameworks and visual semantic understanding,
+      real-world inference and decision-making.
+      I also write about ideas in AI on this page.
+    </p>
+    <ul class="social-row">
+      <li><a href="mailto:jz7842@nyu.edu">Email</a></li>
+      <li><a href="https://github.com/JunjiaZhangMax" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="#" target="_blank" rel="noopener">Google Scholar</a></li>
+      <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </header>
+
+  <!-- ── Research ───────────────────────── -->
+  <section id="research">
+    <h2>Research</h2>
+
+    <div class="entry">
+      <p class="entry-meta">arXiv &middot; 2025</p>
+      <p class="entry-title">Your Paper Title Goes Here</p>
+      <p class="entry-authors"><u>Junjia Zhang</u>, Co-author A, Co-author B</p>
+      <p class="entry-abstract">
+        A concise description of the paper. Summarize the problem you address,
+        the approach you take, and the key findings. Keep it readable and direct.
+      </p>
+      <div class="entry-links">
+        <a href="#">Paper</a>
+        <a href="#">Code</a>
+        <a href="#">Poster</a>
+      </div>
+    </div>
+
+    <div class="entry">
+      <p class="entry-meta">Research Report &middot; 2024</p>
+      <p class="entry-title">Second Research Report Title</p>
+      <p class="entry-authors"><u>Junjia Zhang</u></p>
+      <p class="entry-abstract">
+        Brief description of this report. Explain the context, what you investigated,
+        and the main conclusions drawn from the work.
+      </p>
+      <div class="entry-links">
+        <a href="#">Report</a>
+        <a href="#">Slides</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Courses ────────────────────────── -->
+  <section id="courses">
+    <h2>Courses</h2>
+    <ul class="course-list">
+      <li>
+        <span class="course-name">Introduction to Computer Science</span>
+        <span class="course-code">CS 101 &middot; Fall 2024</span>
+      </li>
+      <li>
+        <span class="course-name">Machine Learning</span>
+        <span class="course-code">ML 301 &middot; Spring 2025</span>
+      </li>
+      <li>
+        <span class="course-name">Natural Language Processing</span>
+        <span class="course-code">NLP 401 &middot; Fall 2025</span>
+      </li>
+      <li>
+        <span class="course-name">Computer Vision</span>
+        <span class="course-code">CV 302 &middot; Spring 2025</span>
+      </li>
+      <li>
+        <span class="course-name">Probability and Statistics</span>
+        <span class="course-code">STAT 250 &middot; Fall 2024</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── Blog ──────────────────────────── -->
+  <section id="blog">
+    <h2>Blog</h2>
+    <ul class="blog-list">
+      <li>
+        <a href="#">Understanding Attention Mechanisms in Transformers</a>
+        <span class="blog-date">Jun 2026</span>
+      </li>
+      <li>
+        <a href="#">Scaling Laws: What They Reveal About the Future of AI</a>
+        <span class="blog-date">May 2026</span>
+      </li>
+      <li>
+        <a href="#">A Survey of Reinforcement Learning from Human Feedback</a>
+        <span class="blog-date">Apr 2026</span>
+      </li>
+      <li>
+        <a href="#">Multimodal Models: Bridging Vision and Language</a>
+        <span class="blog-date">Mar 2026</span>
+      </li>
+      <li>
+        <a href="#">Notes on Diffusion Models for Image Generation</a>
+        <span class="blog-date">Feb 2026</span>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    &copy; 2026 Junjia Zhang
+  </footer>
+
+</body>
+
+</html>
