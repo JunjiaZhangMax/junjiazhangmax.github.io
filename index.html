@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Junjia Zhang — Researcher and AI enthusiast.">
   <title>Junjia Zhang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+    rel="stylesheet">
   <style>
     *,
     *::before,
@@ -47,10 +51,25 @@
     }
 
     header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      margin-bottom: 0.25rem;
+      font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      font-weight: 600;
+      line-height: 0.98;
+      letter-spacing: -0.005em;
+      margin-bottom: 1.1rem;
+    }
+
+    header h1 .given {
+      display: block;
+      font-size: clamp(2rem, 6vw, 2.9rem);
+      font-weight: 500;
+      color: #333;
+    }
+
+    header h1 .family {
+      display: block;
+      font-size: clamp(2.9rem, 9vw, 4.2rem);
+      margin-left: 0.5em;
+      margin-top: -0.04em;
     }
 
     header .subtitle {
@@ -64,6 +83,12 @@
       font-size: 1rem;
       line-height: 1.8;
       margin-bottom: 1.25rem;
+    }
+
+    header p strong {
+      font-weight: 600;
+      color: #000;
+      letter-spacing: 0.005em;
     }
 
     .social-row {
@@ -223,14 +248,14 @@
 <body>
 
   <header>
-    <h1>Junjia Zhang</h1>
+    <h1><span class="given">Junjia</span><span class="family">Zhang</span></h1>
     <p class="subtitle">Learning &middot; Vision &middot; New York University Shanghai</p>
     <p>
-      I am a student [class of 2029] at NYU Shanghai. My work focuses on
-      building more efficient ways in visual information compression and representation;
-      unifying generative model frameworks and visual semantic understanding,
+      I am a student [class of 2029] at <strong>NYU Shanghai</strong>. My work focuses on
+      building more efficient ways in <strong>visual information compression and representation</strong>;
+      unifying <strong>generative model frameworks</strong> and <strong>visual semantic understanding</strong>,
       real-world inference and decision-making.
-      I also write about ideas in AI on this page.
+      I also write about ideas in <strong>AI</strong> on this page.
     </p>
     <ul class="social-row">
       <li><a href="mailto:jz7842@nyu.edu">Email</a></li>

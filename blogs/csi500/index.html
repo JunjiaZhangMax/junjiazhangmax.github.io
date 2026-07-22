@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSI500 Stock Selection — Junjia Zhang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -224,6 +227,116 @@
     @media (max-width: 500px) {
       html { font-size: 16px; }
       body { padding: 40px 1.25rem 80px; }
+    }
+  </style>
+  <style>
+    :root {
+      --ink: #17211f;
+      --ink-soft: #3f4b48;
+      --muted: #6c7772;
+      --faint: #89928e;
+      --paper: #fcfcf8;
+      --paper-deep: #f3f4ed;
+      --line: #dce2da;
+      --accent: #1f6257;
+      --accent-soft: #e6f0ec;
+      --display: 'Playfair Display', Georgia, serif;
+      --serif: 'Newsreader', Palatino, Georgia, serif;
+      --mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
+    }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body {
+      position: relative;
+      max-width: 760px;
+      padding: 72px 2.4rem 132px;
+      font-family: var(--serif);
+      color: var(--ink);
+      background: radial-gradient(circle at 8% 0%, #eef5f0 0, transparent 25rem), var(--paper);
+      line-height: 1.78;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 0;
+      width: 3.2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+    ::selection { background: var(--accent); color: #fff; }
+    a { color: var(--accent); text-decoration-color: color-mix(in srgb, var(--accent) 55%, transparent); text-decoration-thickness: 1px; }
+    a:hover { color: var(--ink); opacity: 1; }
+
+    .back {
+      margin-bottom: 3.35rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-style: normal;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .back:hover { color: var(--accent); }
+    .post-meta {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-style: normal;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    h1.post-title {
+      max-width: 20ch;
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 3.35rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.07;
+      margin-bottom: 1rem;
+    }
+    .post-byline { color: var(--muted); font-size: 0.92rem; margin-bottom: 2.5rem; }
+    .abstract, .result-box {
+      border-radius: 0 10px 10px 0;
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      color: var(--ink-soft);
+      padding: 1.15rem 1.35rem;
+    }
+    .abstract { margin-bottom: 3rem; }
+    .abstract strong { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); }
+    .result-box { margin: 1.7rem 0; border-top: 1px solid #c8ddd5; border-right: 1px solid #c8ddd5; border-bottom: 1px solid #c8ddd5; }
+    hr { border-color: var(--line); margin: 3.5rem 0; }
+    h2 {
+      margin: 3.8rem 0 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      font-family: var(--display);
+      font-size: 1.55rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    h3 { font-size: 1.06rem; margin-top: 2.35rem; color: var(--ink); }
+    p, ul, ol { font-size: 1rem; }
+    li::marker { color: var(--accent); }
+    .table-wrap { border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    table { font-size: 0.84rem; }
+    th { padding: 0.72rem 0.8rem; border-bottom-color: var(--line); background: var(--paper-deep); color: var(--ink-soft); font-family: var(--mono); font-size: 0.68rem; }
+    td { padding: 0.66rem 0.8rem; border-bottom-color: #e9ede8; }
+    tr:nth-child(even) { background: #fbfcf9; }
+    code { color: #195349; background: #e9f1ed; border-radius: 4px; }
+    pre { border: 1px solid var(--line); border-radius: 10px; background: #f1f4ef; color: #2c3b36; box-shadow: inset 0 1px #fff; }
+    figure { margin: 2.5rem 0; }
+    figure img { border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 28px rgba(27, 50, 43, 0.08); }
+    figcaption { padding-left: 0.15rem; color: var(--muted); }
+    .keywords { font-family: var(--mono); font-size: 0.7rem; font-style: normal; letter-spacing: 0.04em; color: var(--muted); }
+    footer { margin-top: 6rem; border-color: var(--line); color: var(--faint); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; }
+    @media (max-width: 500px) {
+      body { padding: 54px 1.3rem 84px; }
+      body::before { top: 25px; width: 2.4rem; }
+      h1.post-title { font-size: 2.05rem; }
+      .abstract, .result-box { padding: 1rem; }
     }
   </style>
 </head>
